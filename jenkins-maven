@@ -1,4 +1,4 @@
- {
+pipeline {
 
 					agent any
 
@@ -9,7 +9,7 @@
 						stage('Stage 1 - Checkout Code') {
 							steps {
 								//Get the code form GITHUB							
-                                git 'https://github.com/graceraji/maven-project.git'
+                                git 'https://github.com/graceraji/maven-project/edit/main/jenkins-maven'
 							}
 						}
 						stage('Stage 2 - Compile Code') {

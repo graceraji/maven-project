@@ -9,7 +9,7 @@
 						stage('Stage 1 - Checkout Code') {
 							steps {
 								//Get the code form GITHUB							
-                                git 
+                                git 'https://github.com/graceraji/maven-project.git'
 							}
 						}
 						stage('Stage 2 - Compile Code') {

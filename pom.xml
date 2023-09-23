@@ -1,6 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/3.8.4."
+<project xmlns="http://maven.apache.org/POM/3.9.4."
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/3.8.4. https://maven.apache.org/xsd/maven-3.8.4.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/3.9.4. https://maven.apache.org/xsd/maven-3.9.4.xsd">
 	<modelVersion>3.8.4</modelVersion>
 	<groupId>MultiplePOM</groupId>
 	<artifactId>MultiplePOM</artifactId>

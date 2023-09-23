@@ -1,47 +1,26 @@
+// beginning of pipeline
 pipeline {
+// specifies pipeline to run on any agent (node)
+    agent any
 
-					agent any
+    stages {
+        stage('Maven Build') {
+            steps {
+                script {
+// get Maven configured in Jenkins and assign to a vairable mvn
+                    def mvn = tool 'Maven3'
+// run a shell command to perform a build
+                    sh "${mvn}/bin/mvn clean install"
 
-					tools {
-						maven "Maven_Home"
-					}
-					stages {
-						stage('Stage 1 - Checkout Code') {
-							steps {
-								//Get the code form GITHUB							
-                                git 'https://github.com/graceraji/maven-project/edit/main/jenkins-maven'
-							}
-						}
-						stage('Stage 2 - Compile Code') {
-							steps {
-								//cmd to compile the code							
-                                bat "mvn compile"
-                                //sh "mvn compile"
-							}
-						}
-						stage('Stage 3 - Run Unit Tests') {
-							steps {
-								//cmd to run tests							
-                                bat "mvn test"
-							}
-						}
-						stage('Stage 4 -Create build') {
-							steps {
-								//cmd to create the build of project							
-                                bat "mvn testpackage"
-							}
-						}
-
-					}
-					post{
-					    	failure {
-						//Send email to team about the failure
-						//emailext body: 'Jenkins build failed', subject: 'Jenkins build failed', to: 'test1@test.com'
-
-					        echo "Email sent for Jenkins build failed"
-				         }
-					}
-
-
-				}
+                    if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
+// echo prints a message
+                        echo 'Maven build successful!'
+                    } else {
+                        error 'Maven build failed!'
+                    }
+                }
+            }
+        }
+    }
+}
 

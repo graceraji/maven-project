@@ -1,0 +1,56 @@
+pipeline{
+    agent any
+    tools{
+        maven 'maven-3.9'
+    }
+    stages{
+        stage('Git Checkout'){
+            steps{
+                git url:'https://graceraji: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@github.com/graceraji/maven-project.git',branch:'main'
+            }
+        }
+        stage('Build Maven Application'){
+            steps{
+                sh 'mvn clean package'
+            }
+        } 
+        stage('Generate sonarqube-analysis'){
+            steps{
+                withSonarQubeEnv(installationName: 'sonarqube-8', credentialsId: 'jenkins-sonar-token') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+        stage('Upload War file to Nexus'){
+            steps{
+             nexusArtifactUploader artifacts: [
+                 [
+                     artifactId:'hiring',
+                     classifier: '', 
+                     file: 'target/hiring.war',
+                     type: 'war'
+                ]
+            ],
+            credentialsId: 'nexus-credentials',
+            groupId: 'in.javahome',
+            nexusUrl: '3.99.222.222:8081',
+            nexusVersion: 'nexus3',
+            protocol: 'http',
+            repository: 'Raji-App',
+            version: '0.1'
+            }
+        }
+        stage('Deploy war file to Tomcat'){
+            steps{
+                sshagent(['tomcat-credentials']){
+                    sh """
+                        scp -o StrictHostKeyChecking=no target/*.war ubuntu@3.96.178.4:/opt/tomcat-9/webapps
+                        ssh -o StrictHostKeyChecking=no ubuntu@3.96.178.4 /opt/tomcat-9/bin/shutdown.sh
+                        ssh -o StrictHostKeyChecking=no ubuntu@3.96.178.4 /opt/tomcat-9/bin/startup.sh
+                    
+                    """
+                }
+            }
+        }
+    }   
+}
